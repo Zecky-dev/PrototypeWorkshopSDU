@@ -1,7 +1,7 @@
 import React from 'react';
 import HomePage from '../HomePage/HomePage';
-import { createStackNavigator } from '@react-navigation/stack';
-const Stack = createStackNavigator();
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
 
 
 const MainStack = () => {

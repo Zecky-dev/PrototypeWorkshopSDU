@@ -9,7 +9,7 @@ const App = () => {
   
   return (
     <NavigationContainer>
-      { isLoggedIn? <MainStack/> : <AuthStack/>}
+      {isLoggedIn?<MainStack/>:<AuthStack/>}
     </NavigationContainer>
   )
 }
