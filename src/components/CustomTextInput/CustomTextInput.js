@@ -4,16 +4,17 @@ import styles from './CustomTextInput.style';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const CustomTextInput = ({placeholder,type,additionalStyles,secret,icon}) => {
+const CustomTextInput = ({placeholder,type,onChangeText,additionalStyles,secret,icon}) => {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container,additionalStyles]}>
         {icon ? <Icon name={icon?.name} size={icon?.size} color={icon?.color}/> : null}
         <TextInput
           secureTextEntry={secret}
           placeholder={placeholder}
+          onChangeText={onChangeText}
           clearButtonMode="while-editing"
           inputMode={type}
-          style={{padding:8}}
+          style={{padding:8,flex:1,}}
         />
       </View>
     );

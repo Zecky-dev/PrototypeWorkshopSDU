@@ -2,7 +2,8 @@ import {StyleSheet,Dimensions} from 'react-native';
 export default StyleSheet.create({
     container: {
         flex:1,
-        margin: 8,
+        alignItems:'center',
+        justifyContent:'center',
     },
     imageContainer: {
         flexDirection: 'row',
@@ -12,5 +13,6 @@ export default StyleSheet.create({
         fontSize: 36,
         color: 'black',
         fontWeight: '300',
+        marginBottom:16
     },    
 });
