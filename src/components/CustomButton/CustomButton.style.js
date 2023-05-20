@@ -6,9 +6,13 @@ export default StyleSheet.create({
         padding: 8,
         borderRadius: 4,
         flexDirection:'row',
-        justifyContent:'center',
+        alignItems:'center',
+        width: '100%',
     },
     label: {
         color: colors.white,
+    },
+    icon:{
+        marginRight:8
     }
 });

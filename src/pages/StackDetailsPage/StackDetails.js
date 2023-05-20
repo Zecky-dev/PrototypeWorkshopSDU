@@ -27,7 +27,7 @@ const StackDetails = ({route}) => {
                 }
                 onPress={() => setModalVisibility(!modalVisibility)}
             />
-            <MaterialModal isVisible={modalVisibility} setVisible={setModalVisibility} info={true}/>
+            <MaterialModal isVisible={modalVisibility} setVisible={setModalVisibility} info={false} type={false}/>
         </View>
     )
 }

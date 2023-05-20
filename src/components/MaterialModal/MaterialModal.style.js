@@ -20,13 +20,17 @@ export default StyleSheet.create({
     },
     image:{
         maxHeight:300,
-        width:200,
+        width:300,
         resizeMode:'contain'
     },
     inputArea: {
         flex:1,
-        paddingHorizontal:8,
         justifyContent:'center',
+    },
+    inputAreaInfo:{
+        flex:1,
+        justifyContent:'space-evenly',
+        height:300
     },
     text:{
         textAlign:'center',
@@ -41,6 +45,16 @@ export default StyleSheet.create({
         color: colors.black ,
         backgroundColor: colors.white,
         marginVertical:8,
-        marginHorizontal:8,
+    },
+    button_container:{
+        justifyContent:'center',
+        alignItems:'center',
+        marginTop:32,
+    },
+    btn:{
+        container:{
+            justifyContent:'center',
+            width: '80%'
+        }
     }
 })

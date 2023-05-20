@@ -4,8 +4,11 @@ import Modal from 'react-native-modal'
 import styles from './MaterialModal.style'
 import CustomTextInput from '../CustomTextInput/CustomTextInput'
 import {Picker} from '@react-native-picker/picker';
+import CustomButton from '../CustomButton/CustomButton'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import colors from '../../utils/colors'
 
-export default function({isVisible,setVisible,info}) {
+export default function({isVisible,setVisible,info,type,handleModal}) {
     const [pickerValue,setPickerValue] = useState("1") 
 
     const optionList = ['1','2','3','4','5','6','7','8','9','10']
@@ -19,14 +22,14 @@ export default function({isVisible,setVisible,info}) {
         onBackButtonPress={() => setVisible(!isVisible)}
         onBackdropPress={() => setVisible(!isVisible)}
         >
-            <ScrollView style={styles.modal_view} >
+            <ScrollView style={styles.modal_view} showsVerticalScrollIndicator={false}>
                 <View style={styles.image_container}>
                     <Image
                         source={require('../../assets/images/matkap.jpg')}
                         style={styles.image}
                     />
                 </View>
-                <View style={styles.inputArea}>
+                <View style={info?styles.inputAreaInfo:styles.inputArea}>
                     {info ? null : <Text style={styles.text}>Ürün adı</Text>}
                     <CustomTextInput
                         info={info}
@@ -53,8 +56,21 @@ export default function({isVisible,setVisible,info}) {
                         info={info}
                         multiline={true}
                     />
-                </View>                
+                    {!info && <View style={styles.button_container}>
+                        <CustomButton
+                            additionalStyles={styles.btn}
+                            label={type ? 'Ekle' : 'Düzenle'}
+                            onPress={handleModal}
+                            icon={{
+                                name: type ? 'plus' : 'book-edit',
+                                color: colors.black,
+                                size: 36
+                            }}
+                        />
+                    </View>}
+                </View> 
             </ScrollView>
+            
         </Modal>
     )
 }
