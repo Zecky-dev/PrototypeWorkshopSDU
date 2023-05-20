@@ -43,7 +43,7 @@ function sortRooms(rooms) {
     return rooms;
 }
 
-export {getFirebaseAuthErrorMessage};
 export {
-    sortRooms
-}
+  getFirebaseAuthErrorMessage,
+  sortRooms
+};
