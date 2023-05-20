@@ -10,6 +10,7 @@ import {Formik} from 'formik';
 import {authValidationSchema} from '../../utils/validations'
 import auth from '@react-native-firebase/auth';
 import { getFirebaseAuthErrorMessage } from '../../utils/functions';
+import { showMessage } from 'react-native-flash-message';
 
 const LoginRegister = ({type}) => {
       const [loading,setLoading] = useState(false);
@@ -23,14 +24,34 @@ const LoginRegister = ({type}) => {
               setLoading(false);
             })
             .catch(error => {
-              getFirebaseAuthErrorMessage(error.code)
-
+              setLoading(false);
+              const errorMessage = getFirebaseAuthErrorMessage(error.code)
+              showMessage({
+                message: errorMessage,
+                type: "warning",
+              });
             })
         }
 
         const login = (values) => {
-            const {email,password} = values;
-            console.log("Login",email,password);
+          
+          const {email,password} = values;
+          setLoading(true);
+          auth()
+          .signInWithEmailAndPassword(email,password)
+          .then(
+            () => {
+              setLoading(false)
+            }
+          )
+          .catch(error => {
+            setLoading(false);
+            const errorMessage = getFirebaseAuthErrorMessage(error.code);
+            showMessage({
+              message: errorMessage,
+              type: "warning",
+            });
+          })
         }
 
 
@@ -61,7 +82,7 @@ const LoginRegister = ({type}) => {
                   type === 'register' ? register(values) : login(values);
                 }}
                 validationSchema={authValidationSchema}>
-                {({handleChange, handleBlur, handleSubmit, values}) => (
+                {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
                   <View>
                     <CustomTextInput
                       icon={{name: 'email', size: 32, color: 'gray'}}
@@ -69,6 +90,7 @@ const LoginRegister = ({type}) => {
                       onChangeText={handleChange('email')}
                       additionalStyles={{container: {margin: 8}}}
                     />
+                    {errors.email && touched.email ? <View><Text style={{color:'red'}}>{errors.email}</Text></View> : null}
                     <View style={{height: 16}} />
                     <CustomTextInput
                       placeholder="Şifreniz"
@@ -77,11 +99,12 @@ const LoginRegister = ({type}) => {
                       onChangeText={handleChange('password')}
                       secret={true}
                     />
+                    {errors.password && touched.password ? <View><Text style={{color:'red'}}>{errors.password}</Text></View> : null}
                     <View style={{height: 16}} />
                     <CustomButton
                       label={type === 'register' ? 'Kayıt Ol' : 'Giriş Yap'}
                       onPress={handleSubmit}
-                      loading={false}
+                      loading={loading}
                     />
                   </View>
                 )}
