@@ -13,5 +13,21 @@ export default StyleSheet.create({
         margin: 0, 
         alignItems: 'center', 
         justifyContent: 'flex-end' 
+    },
+    modal_view: {
+        paddingVertical: 8,
+        minHeight: 100,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'pink',
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16
+    },
+    text:{
+        text_input: {
+            width:'80%'
+        },
+
     }
 })
