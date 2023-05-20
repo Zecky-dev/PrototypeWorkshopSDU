@@ -6,9 +6,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const AuthStack = () => {
     return (
-      <Tab.Navigator screenOptions={{
-        swipeEnabled:false
-      }}>
+      <Tab.Navigator>
         <Tab.Screen name="Kayıt Ol">
           {() => <LoginRegister type="register" />}
         </Tab.Screen>
