@@ -78,7 +78,7 @@ const HomePage = ({navigation}) => {
                             onChangeText={setTitle}
                         />
                     <FAB
-                        style={{justifyContent:'center',alignItems:'center'}}
+                        style={{justifyContent:'center',alignItems:'center',marginTop:8}}
                         size='large'
                         color={colors.white}
                         icon={

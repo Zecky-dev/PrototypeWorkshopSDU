@@ -7,7 +7,7 @@ export default StyleSheet.create({
     FAB:{
         position: 'absolute',
         right: 16,
-        bottom: 16
+        bottom: 16,
     },
     modal:{
         margin: 0, 
@@ -15,7 +15,7 @@ export default StyleSheet.create({
         justifyContent: 'flex-end' 
     },
     modal_view: {
-        paddingVertical: 8,
+        paddingVertical: 16,
         minHeight: 100,
         width: '100%',
         justifyContent: 'center',
