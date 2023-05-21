@@ -32,6 +32,12 @@ const StackDetails = ({route}) => {
             })
             return () => subscriber()
         },[id] )
+
+        useEffect(() => {
+          if(modalType === "edit" || modalType === "preview") {
+            setModalVisible(!modalVisible);
+          }
+        },[material])
     
     // Odadan istenilen materyali uzun basılı tutup silme
     const removeMaterial = async (roomID,materialID) => {
@@ -60,11 +66,8 @@ const StackDetails = ({route}) => {
     const setClickedMaterial = async (roomID,materialID) => {
         const materials = (await firestore().collection('Rooms').doc(roomID).get()).data().materials
         const clickedMaterial = materials.filter(material => material.materialID === materialID);
-        setModalVisible(!modalVisible);
         setMaterial(clickedMaterial);
     }   
-
-
 
 
 
@@ -83,7 +86,6 @@ const StackDetails = ({route}) => {
               }}
               removeMaterial={() => removeMaterial(id, item.materialID)}
               editMaterial={() => {
-                setModalVisible(!modalVisible);
                 setModalType('edit');
                 setClickedMaterial(id, item.materialID);
               }}

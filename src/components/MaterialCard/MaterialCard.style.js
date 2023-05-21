@@ -1,44 +1,54 @@
-import { StyleSheet,Dimensions } from 'react-native'
-
+import {StyleSheet} from 'react-native';
+import colors from '../../utils/colors';
 export default StyleSheet.create({
-    cardContainer: {
-        flexDirection: 'row',
-        width: Dimensions.get('screen').width,
-        height: 100,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowOffset: { width: 0, height: 2 },
-        elevation: 2,
-      },
-      leftContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      rightContainer: {
-        flex: 1,
-        paddingLeft: 10,
-        justifyContent: 'center',
-      },
-      image: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'contain',
-        borderRadius: 10,
-      },
-      materialName: {
-        fontSize: 16,
+   
+   container: {
+    backgroundColor:colors.white,
+    margin: 8,
+   },
+   
+   
+    infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems:'center',
+    margin: 8,
+    padding: 4,
+    borderRadius: 4,
+    },
+   
+    middleContainer: {
+        justifyContent:'center',
+        alignItems:'center',
+    },
+   
+   
+    image: {
+    width: 80,
+    height: 80,
+    },
+   
+    name: {
+    color:"black",
+    fontWeight: "bold",
+    fontSize: 16,
+    textTransform: "capitalize"
+   },
+
+   available: {
+    active: {
+        color: colors.active,
         fontWeight: 'bold',
-        marginBottom: 5,
-      },
-      closetName: {
-        fontSize: 14,
-      },
-      dot: {
-        width: 20,
-        height: 20,
-        borderRadius: 10,
-      },
-})
+    },
+    passive: {
+        color: colors.passive,
+        fontWeight: 'bold',
+    }
+   },
+
+
+   buttonContainer: {
+    flexDirection:'row',
+   }
+
+});

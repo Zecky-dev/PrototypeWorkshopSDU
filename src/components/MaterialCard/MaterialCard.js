@@ -1,50 +1,67 @@
-import React,{useState} from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
-import styles from './MaterialCard.style'
-import MaterialModal from '../MaterialModal2/MaterialModal';
-import { FAB } from 'react-native-elements'
+import React,{useEffect} from 'react';
+import {View,Text,Image, TouchableOpacity} from 'react-native';
 
-import  Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
+import styles from './MaterialCard.style';
+import CustomButton from '../CustomButton/CustomButton';
 import colors from '../../utils/colors';
 
-const MaterialCard = ({data,onPress,onLongPress}) => {
-    const [infoModalVisibility,setInfoModalVisibility] = useState(false)
-    const [editModalVisibility,setEditModalVisibility] = useState(false)
+import firestore from '@react-native-firebase/firestore';
+
+const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
+
+  // Düzenle butonuna basıldığında, material modal'a roomID'si ve materialID'si geçilmeli.
 
     return (
-        <TouchableOpacity style={styles.cardContainer} onPress={onPress} onLongPress={onLongPress}>
-            <View style={styles.leftContainer}>
-                <Image
-                    source={require('../../assets/images/matkap.jpg')}
-                    style={styles.image}
-                />
-            </View>
-            <View style={styles.rightContainer}>
-                <Text style={styles.materialName}>{data.materialName}</Text>
-                <Text style={styles.closetName}>{data.cupboardName}</Text>
-                <View
-                    style={[
-                        styles.dot,
-                        { backgroundColor: data.materialAvailable ? 'green' : 'red' },
-                    ]}
-                />
-            </View>
-            <View>
-                <FAB
-                    color='red'
-                    style={{borderWidth:0,}}
-                    icon={
-                        <Icon
-                            name='book-edit'
-                            size={24}
-                            color={colors.black}
-                        />
-                    }
-                    onPress={() => setEditModalVisibility(!editModalVisibility)}
-                />
-                </View>
-        </TouchableOpacity>
-    )
-};
+      <TouchableOpacity style={styles.container} activeOpacity={.7} onPress={onPress}>
 
-export default MaterialCard
+        <View style={styles.infoContainer}>
+          <Image
+            source={require('../../assets/images/matkap.jpg')}
+            style={styles.image}
+          />
+          <View style={styles.middleContainer}>
+            <Text style={styles.name}>{data.materialName}</Text>
+            <Text style={styles.cupboard}>Dolap: {data.roomTitle}</Text>
+          </View>
+          <Text
+            style={
+              data.materialAvailable
+                ? styles.available.active
+                : styles.available.passive
+            }>
+            {data.materialAvailable ? 'Kullanılabilir' : 'Kullanılamaz'}
+          </Text>
+        </View>
+ 
+        <View style={styles.buttonContainer}>
+            <CustomButton
+                label="Düzenle"
+                onPress={editMaterial}
+                additionalStyles={{
+                    container: {
+                        flex:1,
+                        borderRadius: 0,
+                        backgroundColor: colors.orange
+                    }
+                }}
+            />
+            <View style={{width: 8}} />
+            <CustomButton
+                label="Kaldır"
+                additionalStyles={{
+                    container: {
+                        flex: 1,
+                        borderRadius: 0,
+                        backgroundColor: colors.passive
+                    }
+                }}
+                onPress={removeMaterial}
+            />
+        </View>
+
+
+      </TouchableOpacity>
+    );
+}
+
+export default MaterialCard;
