@@ -28,6 +28,28 @@ function getFirebaseAuthErrorMessage(errorCode) {
         return 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
     }
 }
+
+function getFirebaseFirestoreErrorMessage(error) {
+  switch (error.code) {
+    case "firebase/firestore":
+        return "Firebase Firestore Hatası";
+    case "firebase/firestore-network":
+        return "Firebase Firestore Ağ Hatası";
+    case "firebase/firestore-permission-denied":
+        return "Firebase Firestore İzin Reddedildi";
+    case "firebase/firestore-document-not-found":
+        return "Firebase Firestore Belgesi Bulunamadı";
+    case "firebase/firestore-invalid-argument":
+        return "Firebase Firestore Geçersiz Argüman";
+    default:
+        return "Bilinmeyen Hata";
+}
+}
+
+
+
+
+
 function sortRooms(rooms) {
     rooms.sort(function(a, b) {
       var titleA = a.title.toUpperCase();
@@ -45,5 +67,6 @@ function sortRooms(rooms) {
 
 export {
   getFirebaseAuthErrorMessage,
+  getFirebaseFirestoreErrorMessage,
   sortRooms
 };

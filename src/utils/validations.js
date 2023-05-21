@@ -20,9 +20,18 @@ const authValidations = {
         .min(8,({min}) => Error['minCharacter'](min))
         .max(16,({max}) => Error['maxCharacter'](max))
         .required(Error['required']),
-
 }
 
-const authValidationSchema = yup.object().shape(authValidations);
+const materialValidations = {
+    materialName: yup.string(Error['string']).required(Error['required']),
+    materialDescription: yup.string(Error['string']).required(Error['required']),
+}
 
-export {authValidationSchema};
+
+
+
+
+const authValidationSchema = yup.object().shape(authValidations);
+const materialValidationSchema = yup.object().shape(materialValidations);
+
+export {authValidationSchema,materialValidationSchema};

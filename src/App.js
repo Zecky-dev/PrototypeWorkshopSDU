@@ -26,7 +26,7 @@ const App = () => {
   
   return (
     <NavigationContainer>
-      { user ? <AuthStack/> : <MainStack/> }
+      { user ? <MainStack/> : <AuthStack/> }
       <FlashMessage position="top" />
     </NavigationContainer>
   )

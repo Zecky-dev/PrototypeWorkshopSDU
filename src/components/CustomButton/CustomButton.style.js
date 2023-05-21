@@ -7,6 +7,7 @@ export default StyleSheet.create({
         borderRadius: 4,
         flexDirection:'row',
         alignItems:'center',
+        justifyContent:'center',
         width: '100%',
     },
     label: {

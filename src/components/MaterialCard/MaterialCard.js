@@ -1,18 +1,18 @@
 import React,{useState} from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import styles from './MaterialCard.style'
-import MaterialModal from '../MaterialModal/MaterialModal';
+import MaterialModal from '../MaterialModal2/MaterialModal';
 import { FAB } from 'react-native-elements'
 
 import  Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../utils/colors';
 
-const MaterialCard = ({data}) => {
+const MaterialCard = ({data,onPress,onLongPress}) => {
     const [infoModalVisibility,setInfoModalVisibility] = useState(false)
     const [editModalVisibility,setEditModalVisibility] = useState(false)
 
     return (
-        <TouchableOpacity style={styles.cardContainer} onPress={() => setInfoModalVisibility(!infoModalVisibility)}>
+        <TouchableOpacity style={styles.cardContainer} onPress={onPress} onLongPress={onLongPress}>
             <View style={styles.leftContainer}>
                 <Image
                     source={require('../../assets/images/matkap.jpg')}
@@ -25,7 +25,7 @@ const MaterialCard = ({data}) => {
                 <View
                     style={[
                         styles.dot,
-                        { backgroundColor: data.isAvailable ? 'red' : 'green' },
+                        { backgroundColor: data.materialAvailable ? 'green' : 'red' },
                     ]}
                 />
             </View>
@@ -43,8 +43,6 @@ const MaterialCard = ({data}) => {
                     onPress={() => setEditModalVisibility(!editModalVisibility)}
                 />
                 </View>
-            <MaterialModal isVisible={infoModalVisibility} setVisible={setInfoModalVisibility} info={true} data={data}/>
-            <MaterialModal isVisible={editModalVisibility} setVisible={setEditModalVisibility} type={false} data={data}/>
         </TouchableOpacity>
     )
 };

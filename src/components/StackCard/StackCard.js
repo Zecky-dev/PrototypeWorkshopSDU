@@ -8,9 +8,7 @@ const StackCard = ({data,onLongPress,navigation}) => {
             <View style={styles.container}>
                 <Text style={styles.text.title_Text}>{data.title}</Text>
             </View>
-            
         </TouchableOpacity>
     )
 }
-
 export default StackCard

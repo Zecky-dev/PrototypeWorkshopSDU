@@ -23,7 +23,7 @@ const MainStack = () => {
               <CustomButton
                 icon={{name: 'logout', size: 32, color: 'white'}}
                 onPress={() => auth().signOut()}
-                additionalStyle={{
+                additionalStyles={{
                   container: {
                     width: 50,
                     height: 50,

@@ -13,12 +13,11 @@ const CustomTextInput = ({placeholder,type,onChangeText,additionalStyles,secret,
           placeholder={placeholder}
           onChangeText={onChangeText}
           clearButtonMode="while-editing"
-          inputMode={type}
-          editable={info===true?false:true}
+          editable={info ? false : true}
           multiline={multiline}
           value={value}
-          style={[{padding:8,flex:1,},additionalStyles]}
-          
+          keyboardType={type}
+          style={[{padding:8,flex:1,},additionalStyles]}  
         />
       </View>
     );
