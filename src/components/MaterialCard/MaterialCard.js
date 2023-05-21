@@ -7,7 +7,7 @@ import colors from '../../utils/colors';
 
 import firestore from '@react-native-firebase/firestore';
 
-const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
+const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) => {
 
   // Düzenle butonuna basıldığında, material modal'a roomID'si ve materialID'si geçilmeli.
 
@@ -31,9 +31,9 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
             }>
             {data.materialAvailable ? 'Kullanılabilir' : 'Kullanılamaz'}
           </Text>
+
         </View>
- 
-        <View style={styles.buttonContainer}>
+        {!isSearching?<View style={styles.buttonContainer}>
             <CustomButton
                 label="Düzenle"
                 onPress={editMaterial}
@@ -45,7 +45,7 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
                     }
                 }}
             />
-            <View style={{width: 8}} />
+          <View style={{width: 8}} />
             <CustomButton
                 label="Kaldır"
                 additionalStyles={{
@@ -57,9 +57,8 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
                 }}
                 onPress={removeMaterial}
             />
-        </View>
-
-
+        </View>:null}
+        
       </TouchableOpacity>
     );
 }

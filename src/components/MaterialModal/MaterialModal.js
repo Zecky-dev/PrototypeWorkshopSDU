@@ -22,7 +22,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
     
     // Bulunulan odaya yeni materyaller ekleme
     const addMaterial = async (roomID,roomTitle,materialName,materialUnit,materialDescription) => {
-        const material = {roomTitle,materialID: uuidv4() ,materialName,materialUnit,materialDescription,materialAvailable:true};
+        const material = {roomTitle,roomID,materialID: uuidv4() ,materialName,materialUnit,materialDescription,materialAvailable:true};
         try {
             const roomRef = firestore().collection('Rooms').doc(roomID);
             await roomRef.update({
