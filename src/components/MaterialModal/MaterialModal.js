@@ -147,20 +147,33 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                       values.materialName,
                       values.materialUnit,
                       values.materialDescription,
-                      values.materialAvailable === "+" ? true : false,
+                      values.materialAvailable === '+' ? true : false,
                     )
                 : null
             }>
             {({handleChange, handleBlur, handleSubmit, values}) => (
               <ScrollView style={styles.innerContainer}>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.imageContainer}>
-                  <Image
-                    source={require('../../assets/images/matkap.jpg')}
-                    style={styles.image}
-                  />
-                </TouchableOpacity>
+                <View style={styles.imageAddContainer}>
+                  <View style={{alignItems:'center'}}>
+                    <Image source={require('../../assets/images/matkap.jpg')} style={styles.image}/>
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <CustomButton
+                      label="Kameradan Çek"
+                      icon={{name: 'camera', color: colors.white, size: 36}}
+                      additionalStyles={{container: {borderRadius:0,width:'49%'}}}
+                      onPress={() => console.log('Kameradan çekiliyor')}
+                    />
+                  
+                    <CustomButton
+                      label="Galeriden Seç"
+                      additionalStyles={{container: {borderRadius:0,width:'49%'}}}
+                      icon={{name: 'view-gallery', color: colors.white, size: 36}}
+                      onPress={() => console.log('Kameradan çekiliyor')}
+                    />
+                  </View>
+                  
+                </View>
 
                 {/* material name */}
                 <View style={styles['input'].container}>
@@ -197,12 +210,11 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                     <Text style={styles['input'].label}>
                       Materyal Kullanılabilirlik
                     </Text>
-                    <View style={{borderRadius: 8,backgroundColor:'white'}}>
+                    <View style={{borderRadius: 8, backgroundColor: 'white'}}>
                       <Picker
                         mode="dropdown"
                         selectedValue={values.materialAvailable}
-                        onValueChange={handleChange('materialAvailable')}
-                      >
+                        onValueChange={handleChange('materialAvailable')}>
                         <Picker.Item label="Kullanılabilir" value="+" />
                         <Picker.Item label="Kullanılamaz" value="-" />
                       </Picker>
@@ -215,6 +227,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                     label={type === 'edit' ? 'Düzenle' : 'Ekle'}
                     additionalStyles={{
                       container: {
+                        marginBottom: 24,
                         marginTop: 8,
                         padding: 12,
                         backgroundColor: colors.active,

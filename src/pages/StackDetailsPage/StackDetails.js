@@ -5,8 +5,8 @@ import { Button, FAB, SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './StackDetails.styles'
 
-import MaterialCard from '../../components/MaterialCard2/MaterialCard';
-import MaterialModal from '../../components/MaterialModal2/MaterialModal'
+import MaterialCard from '../../components/MaterialCard/MaterialCard';
+import MaterialModal from '../../components/MaterialModal/MaterialModal'
 
 
 import firestore from '@react-native-firebase/firestore'
@@ -14,6 +14,7 @@ import firestore from '@react-native-firebase/firestore'
 const StackDetails = ({route}) => {
     const [modalVisible,setModalVisible] = useState(false);
     const [modalType,setModalType] = useState("");
+    const [searchText,setSearchtext] = useState(""); 
     
     const {id,title} = route.params;
 
@@ -30,6 +31,8 @@ const StackDetails = ({route}) => {
             .onSnapshot(documentSnapshot => {
                 setMaterials(documentSnapshot.data().materials)
             })
+
+            
             return () => subscriber()
         },[id] )
 
@@ -38,6 +41,13 @@ const StackDetails = ({route}) => {
             setModalVisible(!modalVisible);
           }
         },[material])
+
+        useEffect(() =>{
+          console.log(searchText)
+        },[searchText])
+
+
+
     
     // Odadan istenilen materyali uzun basılı tutup silme
     const removeMaterial = async (roomID,materialID) => {
@@ -73,8 +83,7 @@ const StackDetails = ({route}) => {
 
     return (
       <View style={styles.container}>
-        <SearchBar />
-
+        <SearchBar onChangeText={(text) => setSearchtext(text)} value={searchText} />
         <FlatList
           data={materials}
           renderItem={({item}) => (
