@@ -72,9 +72,9 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
               ...materialsWithoutUpdateElement,
               updateElement
             ];
-      
+
             await documentRef.update({ materials: updatedMaterials });
-            console.log("Öğe güncellendi.");
+            setModalVisible(!isVisible)
           } else {
             console.log("Güncellenmek istenen öğe bulunamadı.");
           }
@@ -84,30 +84,6 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
       }
       
 
-
-
-      // try {
-      //     const documentRef = firestore().collection('Rooms').doc(roomID); // rooms içindeki ilgili odaya geldik.
-      //     const documentSnapshot = await documentRef.get(); // içindeki veriyi aldık
-
-      //     if(documentSnapshot.exists) { // veri var mı kontrol ettik
-      //         const materialArr = documentSnapshot.get('materials'); // materials dizisini aldık
-      //         let materialsWithoutUpdateElement = materialArr.filter((material) => material.materialID === materialID);
-      //         materialsWithoutUpdateElement = [
-      //           ...materialsWithoutUpdateElement,
-      //           materialName,
-      //           materialUnit,
-      //           materialDescription
-      //         ]
-      //         console.log(materialsWithoutUpdateElement);
-      //     }
-      //     else {
-      //         console.log("Belirtilen döküman bulunamadı.")
-      //     }
-      // }
-      // catch(error) {
-      //     console.log("Belirtilen döküman bulunamadı")
-      // }
   }
 
     return (
@@ -126,7 +102,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
               materialDescription: data['0']
                 ? data['0'].materialDescription
                 : '',
-              materialAvailable: data['0'] ? data['0'].materialAvailable : true,
+              materialAvailable: data['0']?.materialAvailable===true?"+":"-",
             }}
             validationSchema={materialValidationSchema}
             onSubmit={
@@ -168,6 +144,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                   <CustomTextInput
                     value={values.materialName}
                     onChangeText={handleChange('materialName')}
+                    modalType={type}
                   />
                 </View>
 
@@ -178,6 +155,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                     value={values.materialUnit}
                     onChangeText={handleChange('materialUnit')}
                     type={'numeric'}
+                    modalType={type}
                   />
                 </View>
 
@@ -188,6 +166,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                     value={values.materialDescription}
                     multiline={true}
                     onChangeText={handleChange('materialDescription')}
+                    modalType={type}
                   />
                 </View>
 

@@ -142,7 +142,7 @@ const StackDetails = ({route}) => {
             />
           )}
         />
-
+        
         <FAB
           style={styles.FAB}
           size="large"

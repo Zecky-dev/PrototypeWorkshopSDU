@@ -78,6 +78,10 @@ const HomePage = ({navigation}) => {
         rooms.orderBy('title').onSnapshot(onResult,onError);
     },[])
 
+    useEffect(() => {
+        handleSearch(searchText)
+    },[allMaterials,searchText])
+
     // Oda silme
     const onRoomLongPress = (id) => {
         const removeRoom = (id) => {
