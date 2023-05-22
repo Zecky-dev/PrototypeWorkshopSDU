@@ -9,7 +9,7 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import { showMessage } from 'react-native-flash-message';
 
-const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) => {
+const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching,userType,takeMaterial,giveBackMaterial}) => {
 
   /*
   const [image,setImage] = useState(null);
@@ -89,8 +89,7 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) =>
         </View>
         {!isSearching?<View style={styles.buttonContainer}>
             <CustomButton
-                label="Düzenle"
-                onPress={editMaterial}
+                label={userType==='superVisor'?"Düzenle":'Aleti Al'}
                 additionalStyles={{
                     container: {
                         flex:1,
@@ -98,10 +97,12 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) =>
                         backgroundColor: colors.orange
                     }
                 }}
+                isAvailable={userType!=='superVisor' && data.materialUnit === '0'}
+                onPress={userType==='superVisor'?editMaterial:takeMaterial}
             />
           <View style={{width: 8}} />
             <CustomButton
-                label="Kaldır"
+                label={userType==='superVisor'?"Kaldır":'Geri Bırak'}
                 additionalStyles={{
                     container: {
                         flex: 1,
@@ -109,7 +110,7 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) =>
                         backgroundColor: colors.passive
                     }
                 }}
-                onPress={removeMaterial}
+                onPress={userType==='superVisor'?removeMaterial:giveBackMaterial}
             />
         </View>:null}
         

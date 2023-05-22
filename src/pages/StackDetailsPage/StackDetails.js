@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { Alert, FlatList, Text,View } from 'react-native'
-import { Button, FAB, SearchBar } from 'react-native-elements';
+import { FAB, SearchBar } from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './StackDetails.styles'
@@ -12,14 +12,23 @@ import MaterialModal from '../../components/MaterialModal/MaterialModal'
 import firestore from '@react-native-firebase/firestore'
 
 const StackDetails = ({route}) => {
+    
+    //room states
+    const {id,title} = route.params;
+  
+    //modal states
     const [modalVisible,setModalVisible] = useState(false);
     const [modalType,setModalType] = useState("");
-    const [searchText,setSearchText] = useState(""); 
-    const {id,title} = route.params;
+    
+    //material states
     const [materials,setMaterials] = useState([]);
     const [material,setMaterial] = useState();
 
-    
+    //search states
+    const [searchText, setSearchText] = useState('');
+
+    //supervisor states
+    const [userType,setUserType] = useState('superVisor');
 
     //Odadaki materyalleri ismine göre arama
     const handleSearch = async (text) => {
@@ -92,13 +101,41 @@ const StackDetails = ({route}) => {
         }
     }
 
-    const setClickedMaterial = async (roomID,materialID) => {
+    const setClickedMaterial = async (roomID,materialID,type) => {
         const materials = (await firestore().collection('Rooms').doc(roomID).get()).data().materials
         const clickedMaterial = materials.filter(material => material.materialID === materialID);
         setMaterial(clickedMaterial);
     }   
 
-    
+  const takeAndGetBack = async (roomID, materialID, type) => {
+    try {
+      const roomRef = firestore().collection('Rooms').doc(roomID);
+      const roomSnapshot = await roomRef.get();
+      const allMaterials = roomSnapshot.data().materials;
+  
+      const updateMaterial = allMaterials.find(material => material.materialID === materialID);
+      const updateWithoutMaterial = allMaterials.filter(material => material.materialID !== materialID);
+  
+      if (+updateMaterial.materialUnit >= 0) {
+        const materialUnit = +updateMaterial.materialUnit;
+        const updatedMaterialUnit = type === 'take' ? materialUnit - 1 : materialUnit + 1;
+        const materialAvailable = updatedMaterialUnit !== 0;
+  
+        const newMaterial = {
+          ...updateMaterial,
+          materialUnit: updatedMaterialUnit.toString(),
+          materialAvailable: materialAvailable,
+        };
+  
+        const updatedMaterials = [...updateWithoutMaterial, newMaterial];
+  
+        await roomRef.update({ materials: updatedMaterials });
+      }
+    } catch (error) {
+      console.log("Belirtilen döküman bulunamadı", error);
+    }
+  };
+
     return (
       <View style={styles.container}>
       <SearchBar
@@ -111,6 +148,7 @@ const StackDetails = ({route}) => {
           renderItem={({item}) => (
             <MaterialCard
               data={item}
+              userType={userType}
               onPress={() => {
                 setModalType('preview');
                 setClickedMaterial(id, item.materialID);
@@ -139,11 +177,13 @@ const StackDetails = ({route}) => {
                 setModalType('edit');
                 setClickedMaterial(id, item.materialID);
               }}
+              takeMaterial={() => takeAndGetBack(id, item.materialID,'take')}
+              giveBackMaterial={() => takeAndGetBack(id, item.materialID,'giveback')}
             />
           )}
         />
-
-        <FAB
+        
+        {userType==='superVisor'?<FAB
           style={styles.FAB}
           size="large"
           color="gray"
@@ -152,7 +192,7 @@ const StackDetails = ({route}) => {
             setModalType('add');
             setModalVisible(!modalVisible);
           }}
-        />
+        />:null}
 
         <MaterialModal
           isVisible={modalVisible}

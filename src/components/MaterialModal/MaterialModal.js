@@ -75,9 +75,9 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
               ...materialsWithoutUpdateElement,
               updateElement
             ];
-      
+
             await documentRef.update({ materials: updatedMaterials });
-            console.log("Öğe güncellendi.");
+            setModalVisible(!isVisible)
           } else {
             console.log("Güncellenmek istenen öğe bulunamadı.");
           }
@@ -85,6 +85,8 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
       } catch (err) {
         console.log(err);
       }
+      
+
   }
 
     return (
@@ -103,7 +105,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
               materialDescription: data['0']
                 ? data['0'].materialDescription
                 : '',
-              materialAvailable: data['0'] ? data['0'].materialAvailable : true,
+              materialAvailable: data['0']?.materialAvailable===true?"+":"-",
             }}
             validationSchema={materialValidationSchema}
             onSubmit={
@@ -170,6 +172,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                   <CustomTextInput
                     value={values.materialName}
                     onChangeText={handleChange('materialName')}
+                    modalType={type}
                   />
                 </View>
 
@@ -180,6 +183,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                     value={values.materialUnit}
                     onChangeText={handleChange('materialUnit')}
                     type={'numeric'}
+                    modalType={type}
                   />
                 </View>
 
@@ -190,6 +194,7 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                     value={values.materialDescription}
                     multiline={true}
                     onChangeText={handleChange('materialDescription')}
+                    modalType={type}
                   />
                 </View>
 
