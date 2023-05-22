@@ -7,7 +7,7 @@ import colors from '../../utils/colors';
 
 import firestore from '@react-native-firebase/firestore';
 
-const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) => {
+const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching,userType,takeMaterial,giveBackMaterial}) => {
 
   // Düzenle butonuna basıldığında, material modal'a roomID'si ve materialID'si geçilmeli.
 
@@ -35,8 +35,7 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) =>
         </View>
         {!isSearching?<View style={styles.buttonContainer}>
             <CustomButton
-                label="Düzenle"
-                onPress={editMaterial}
+                label={userType==='superVisor'?"Düzenle":'Aleti Al'}
                 additionalStyles={{
                     container: {
                         flex:1,
@@ -44,10 +43,12 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) =>
                         backgroundColor: colors.orange
                     }
                 }}
+                isAvailable={userType!=='superVisor' && data.materialUnit === '0'}
+                onPress={userType==='superVisor'?editMaterial:takeMaterial}
             />
           <View style={{width: 8}} />
             <CustomButton
-                label="Kaldır"
+                label={userType==='superVisor'?"Kaldır":'Geri Bırak'}
                 additionalStyles={{
                     container: {
                         flex: 1,
@@ -55,7 +56,7 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) =>
                         backgroundColor: colors.passive
                     }
                 }}
-                onPress={removeMaterial}
+                onPress={userType==='superVisor'?removeMaterial:giveBackMaterial}
             />
         </View>:null}
         

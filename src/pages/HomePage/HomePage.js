@@ -29,6 +29,9 @@ const HomePage = ({navigation}) => {
     const [filteredMaterials,setFilteredMaterials] = useState([])
     const [isSearching,setIsSearching] = useState(false)
 
+    //supervisor state
+    const [userType,setUserType] = useState('superVisor')
+
     //search
     const handleSearch = async(searchText) => {
         setSearchText(searchText)
@@ -80,7 +83,7 @@ const HomePage = ({navigation}) => {
 
     useEffect(() => {
         handleSearch(searchText)
-    },[allMaterials,searchText])
+    },[allMaterials])
 
     // Oda silme
     const onRoomLongPress = (id) => {
@@ -135,7 +138,7 @@ const HomePage = ({navigation}) => {
                 keyExtractor={(item) => item.materialID}
             />}
             
-            <FAB
+            {userType==='superVisor'?<FAB
                 style={styles.FAB}
                 size='large'
                 color='gray'
@@ -147,7 +150,7 @@ const HomePage = ({navigation}) => {
                     />
                 }
                 onPress={() => setModalVisibility(!modalVisibility)}
-            />
+            />:null}
             <Modal style={styles.modal}
                 isVisible={modalVisibility}
                 onBackButtonPress={() => setModalVisibility(!modalVisibility)}
