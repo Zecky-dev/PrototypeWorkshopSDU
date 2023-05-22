@@ -5,9 +5,63 @@ import styles from './MaterialCard.style';
 import CustomButton from '../CustomButton/CustomButton';
 import colors from '../../utils/colors';
 
+import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import { showMessage } from 'react-native-flash-message';
 
-const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
+const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) => {
+
+  /*
+  const [image,setImage] = useState(null);
+  const [uploading,setUploading] = useState(false);
+  
+  // Materyal oluşturulurken önce materyal firestore'a yazılacak.
+  // Sonrasında uploadImage fonksiyonu ile image'i upload edilecek.
+  const addMaterial = async (roomID,materialID,imagePath) => {
+    setUploading(true);
+    const reference = storage().ref(`/${roomID}/${materialID}`);
+    reference
+    .putFile(imagePath) // imagePath fotoğraf çekildikten sonraki resmin local konumu
+    .then(async () => {
+      // Yüklendikten sonra resmin URL'si material'in materialURL field'ina geçilmeli..
+      const imageURL = await storage().ref(`/${roomID}/${materialID}`).getDownloadURL();
+      
+      const material = {roomTitle,roomID,materialID: uuidv4() ,materialName,materialUnit,materialDescription,materialAvailable:true};
+        try {
+            const roomRef = firestore().collection('Rooms').doc(roomID);
+            await roomRef.update({
+                id: roomID,
+                title: roomTitle,
+                materials: firestore.FieldValue.arrayUnion(material)
+            })
+            setModalVisible(!isVisible)
+        }
+        catch(err) {
+            console.log(err)
+            showMessage({
+                message: getFirebaseFirestoreErrorMessage(err),
+                type: "danger"
+            })
+        }
+    })
+    .catch((err) => {
+      console.log("Storage error:" + err.message)
+      showMessage({
+        message: err.message,
+        type: "danger", 
+      })  
+    });
+    
+  }
+
+  */
+
+  
+
+
+
+
+
 
   // Düzenle butonuna basıldığında, material modal'a roomID'si ve materialID'si geçilmeli.
 
@@ -31,9 +85,9 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
             }>
             {data.materialAvailable ? 'Kullanılabilir' : 'Kullanılamaz'}
           </Text>
+
         </View>
- 
-        <View style={styles.buttonContainer}>
+        {!isSearching?<View style={styles.buttonContainer}>
             <CustomButton
                 label="Düzenle"
                 onPress={editMaterial}
@@ -45,7 +99,7 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
                     }
                 }}
             />
-            <View style={{width: 8}} />
+          <View style={{width: 8}} />
             <CustomButton
                 label="Kaldır"
                 additionalStyles={{
@@ -57,9 +111,8 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial}) => {
                 }}
                 onPress={removeMaterial}
             />
-        </View>
-
-
+        </View>:null}
+        
       </TouchableOpacity>
     );
 }

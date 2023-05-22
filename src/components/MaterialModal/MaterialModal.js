@@ -17,12 +17,15 @@ import { getFirebaseFirestoreErrorMessage } from '../../utils/functions';
 import firestore from '@react-native-firebase/firestore';
 import { Picker } from '@react-native-picker/picker';
 
+import {launchCamera,launchImageLibrary} from 'react-native-image-picker';
+
+
 const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
 
     
     // Bulunulan odaya yeni materyaller ekleme
     const addMaterial = async (roomID,roomTitle,materialName,materialUnit,materialDescription) => {
-        const material = {roomTitle,materialID: uuidv4() ,materialName,materialUnit,materialDescription,materialAvailable:true};
+        const material = {roomTitle,roomID,materialID: uuidv4() ,materialName,materialUnit,materialDescription,materialAvailable:true};
         try {
             const roomRef = firestore().collection('Rooms').doc(roomID);
             await roomRef.update({
@@ -82,32 +85,6 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
       } catch (err) {
         console.log(err);
       }
-      
-
-
-
-      // try {
-      //     const documentRef = firestore().collection('Rooms').doc(roomID); // rooms içindeki ilgili odaya geldik.
-      //     const documentSnapshot = await documentRef.get(); // içindeki veriyi aldık
-
-      //     if(documentSnapshot.exists) { // veri var mı kontrol ettik
-      //         const materialArr = documentSnapshot.get('materials'); // materials dizisini aldık
-      //         let materialsWithoutUpdateElement = materialArr.filter((material) => material.materialID === materialID);
-      //         materialsWithoutUpdateElement = [
-      //           ...materialsWithoutUpdateElement,
-      //           materialName,
-      //           materialUnit,
-      //           materialDescription
-      //         ]
-      //         console.log(materialsWithoutUpdateElement);
-      //     }
-      //     else {
-      //         console.log("Belirtilen döküman bulunamadı.")
-      //     }
-      // }
-      // catch(error) {
-      //     console.log("Belirtilen döküman bulunamadı")
-      // }
   }
 
     return (
@@ -162,7 +139,19 @@ const MaterialModal = ({isVisible,setModalVisible,type,data}) => {
                       label="Kameradan Çek"
                       icon={{name: 'camera', color: colors.white, size: 36}}
                       additionalStyles={{container: {borderRadius:0,width:'49%'}}}
-                      onPress={() => console.log('Kameradan çekiliyor')}
+                      onPress={() => {
+                        const takePhoto = async () => {
+                          const result = await launchCamera({
+                            mediaType: 'photo',
+                            maxWidth: 300,
+                            maxHeight: 300,
+                            quality: 1,
+                            cameraType: 'back',
+                          });
+                          console.log(result);
+                        } 
+                        takePhoto();
+                      }}
                     />
                   
                     <CustomButton
