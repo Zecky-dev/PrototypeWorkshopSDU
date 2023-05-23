@@ -2,6 +2,8 @@ import { StyleSheet } from "react-native";
 import colors from "../../utils/colors";
 export default StyleSheet.create({
     container: {
+        width: '100%',
+        height: '80%',
         justifyContent:'center',
         backgroundColor: "rgba(0,0,0,0.5)",
     },
@@ -12,8 +14,9 @@ export default StyleSheet.create({
         alignItems:'center',
     },  
     image: {
-        width: 200,
-        height: 200,
+        borderRadius: 8,
+        width: 300,
+        height: 300,
     },
     input: {
         container: {
@@ -24,6 +27,12 @@ export default StyleSheet.create({
             fontSize: 18,
             color: colors.white,
         }
+    },
+    buttonContainer: {
+        width: '100%',
+        justifyContent:'space-around',
+        flexDirection: 'row',
+        marginTop: 12,
     }
 
 

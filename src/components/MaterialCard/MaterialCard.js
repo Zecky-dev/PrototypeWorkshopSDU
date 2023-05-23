@@ -1,24 +1,30 @@
-import React,{useEffect} from 'react';
-import {View,Text,Image, TouchableOpacity} from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 
 import styles from './MaterialCard.style';
 import CustomButton from '../CustomButton/CustomButton';
 import colors from '../../utils/colors';
 
+import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import { showMessage } from 'react-native-flash-message';
 
-const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) => {
+const MaterialCard = ({ data, onPress, removeMaterial, editMaterial, isSearching, userType, takeMaterial, giveBackMaterial }) => {
 
   // Düzenle butonuna basıldığında, material modal'a roomID'si ve materialID'si geçilmeli.
 
-    return (
-      <TouchableOpacity style={styles.container} activeOpacity={.7} onPress={onPress}>
+  console.log(data)
 
-        <View style={styles.infoContainer}>
+  return (
+    <TouchableOpacity style={styles.container} activeOpacity={.7} onPress={onPress}>
+      <View style={styles.infoContainer}>
+        <View style={styles.imageContainer} >
           <Image
-            source={require('../../assets/images/matkap.jpg')}
+            source={{ uri: data.materialImageURL }}
             style={styles.image}
           />
+        </View>
+        <View style={styles.textContainer} >
           <View style={styles.middleContainer}>
             <Text style={styles.name}>{data.materialName}</Text>
             <Text style={styles.cupboard}>Dolap: {data.roomTitle}</Text>
@@ -31,36 +37,40 @@ const MaterialCard = ({data,onPress,removeMaterial,editMaterial,isSearching}) =>
             }>
             {data.materialAvailable ? 'Kullanılabilir' : 'Kullanılamaz'}
           </Text>
-
         </View>
-        {!isSearching?<View style={styles.buttonContainer}>
-            <CustomButton
-                label="Düzenle"
-                onPress={editMaterial}
-                additionalStyles={{
-                    container: {
-                        flex:1,
-                        borderRadius: 0,
-                        backgroundColor: colors.orange
-                    }
-                }}
-            />
-          <View style={{width: 8}} />
-            <CustomButton
-                label="Kaldır"
-                additionalStyles={{
-                    container: {
-                        flex: 1,
-                        borderRadius: 0,
-                        backgroundColor: colors.passive
-                    }
-                }}
-                onPress={removeMaterial}
-            />
-        </View>:null}
-        
-      </TouchableOpacity>
-    );
+
+      </View>
+      {
+        !isSearching ? <View style={styles.buttonContainer}>
+          <CustomButton
+            label={userType === 'superVisor' ? "Düzenle" : 'Aleti Al'}
+            additionalStyles={{
+              container: {
+                flex: 1,
+                borderRadius: 4,
+                backgroundColor: colors.orange
+              }
+            }}
+            isAvailable={userType !== 'superVisor' && data.materialUnit === '0'}
+            onPress={userType === 'superVisor' ? editMaterial : takeMaterial}
+          />
+          <View style={{ width: 8 }} />
+          <CustomButton
+            label={userType === 'superVisor' ? "Kaldır" : 'Geri Bırak'}
+            additionalStyles={{
+              container: {
+                flex: 1,
+                borderRadius: 4,
+                backgroundColor: colors.passive
+              }
+            }}
+            onPress={userType === 'superVisor' ? removeMaterial : giveBackMaterial}
+          />
+        </View> : null
+      }
+
+    </TouchableOpacity >
+  );
 }
 
 export default MaterialCard;
