@@ -6,7 +6,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const AuthStack = () => {
     return (
-
+      <Tab.Navigator>
         <Tab.Screen name="Kayıt Ol">
           {() => <LoginRegister type="register" />}
         </Tab.Screen>
