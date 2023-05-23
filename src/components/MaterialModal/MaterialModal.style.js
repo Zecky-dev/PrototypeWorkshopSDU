@@ -14,6 +14,7 @@ export default StyleSheet.create({
         alignItems:'center',
     },  
     image: {
+        borderRadius: 8,
         width: 300,
         height: 300,
     },
