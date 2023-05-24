@@ -13,63 +13,58 @@ const MaterialCard = ({ data, onPress, removeMaterial, editMaterial, isSearching
 
   // Düzenle butonuna basıldığında, material modal'a roomID'si ve materialID'si geçilmeli.
 
-  console.log(data)
-
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={.7} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={0.7}
+      onPress={onPress}>
       <View style={styles.infoContainer}>
-        <View style={styles.imageContainer} >
-          <Image
-            source={{ uri: data.materialImageURL }}
-            style={styles.image}
-          />
+        
+          <Image source={{uri: data.materialImageURL}} style={styles.image} />
+        <View style={styles.middleContainer}>
+          <Text style={styles.name}>{data.materialName}</Text>
+          <Text style={styles.cupboard}>Dolap: {data.roomTitle}</Text>
         </View>
-        <View style={styles.textContainer} >
-          <View style={styles.middleContainer}>
-            <Text style={styles.name}>{data.materialName}</Text>
-            <Text style={styles.cupboard}>Dolap: {data.roomTitle}</Text>
-          </View>
-          <Text
-            style={
-              data.materialAvailable
-                ? styles.available.active
-                : styles.available.passive
-            }>
-            {data.materialAvailable ? 'Kullanılabilir' : 'Kullanılamaz'}
-          </Text>
-        </View>
-
+        <Text
+          style={
+            data.materialAvailable
+              ? styles.available.active
+              : styles.available.passive
+          }>
+          {data.materialAvailable ? 'Kullanılabilir' : 'Kullanılamaz'}
+        </Text>
       </View>
-      {
-        !isSearching ? <View style={styles.buttonContainer}>
+      {!isSearching ? (
+        <View style={styles.buttonContainer}>
           <CustomButton
-            label={userType === 'superVisor' ? "Düzenle" : 'Aleti Al'}
+            label={userType === 'superVisor' ? 'Düzenle' : 'Aleti Al'}
             additionalStyles={{
               container: {
                 flex: 1,
                 borderRadius: 4,
-                backgroundColor: colors.orange
-              }
+                backgroundColor: colors.orange,
+              },
             }}
             isAvailable={userType !== 'superVisor' && data.materialUnit === '0'}
             onPress={userType === 'superVisor' ? editMaterial : takeMaterial}
           />
-          <View style={{ width: 8 }} />
+          <View style={{width: 8}} />
           <CustomButton
-            label={userType === 'superVisor' ? "Kaldır" : 'Geri Bırak'}
+            label={userType === 'superVisor' ? 'Kaldır' : 'Geri Bırak'}
             additionalStyles={{
               container: {
                 flex: 1,
                 borderRadius: 4,
-                backgroundColor: colors.passive
-              }
+                backgroundColor: colors.passive,
+              },
             }}
-            onPress={userType === 'superVisor' ? removeMaterial : giveBackMaterial}
+            onPress={
+              userType === 'superVisor' ? removeMaterial : giveBackMaterial
+            }
           />
-        </View> : null
-      }
-
-    </TouchableOpacity >
+        </View>
+      ) : null}
+    </TouchableOpacity>
   );
 }
 

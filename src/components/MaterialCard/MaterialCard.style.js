@@ -24,10 +24,6 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
 
-    imageContainer: {
-        alignItems: 'center',
-        flex: 0.4
-    },
 
     image: {
         borderRadius: 12,
@@ -35,17 +31,12 @@ export default StyleSheet.create({
         height: 120,
     },
 
-    textContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        flex: 0.6
-    },
+ 
 
     name: {
         color: "black",
         fontWeight: "bold",
-        fontSize: 24,
+        fontSize: 18,
         textTransform: "capitalize"
     },
 

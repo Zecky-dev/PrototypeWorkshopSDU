@@ -11,6 +11,7 @@ import MaterialModal from '../../components/MaterialModal/MaterialModal'
 
 import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage';
+import auth from '@react-native-firebase/auth';
 import { showMessage } from 'react-native-flash-message';
 
 
@@ -23,6 +24,9 @@ const StackDetails = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalType, setModalType] = useState("");
 
+  const [formVisible,setFormVisible] = useState(true);
+  const [percent,setPercent] = useState(0);
+
   //material states
   const [materials, setMaterials] = useState([]);
   const [material, setMaterial] = useState();
@@ -31,7 +35,17 @@ const StackDetails = ({ route }) => {
   const [searchText, setSearchText] = useState('');
 
   //supervisor states
-  const [userType, setUserType] = useState('superVisor');
+  const [userType, setUserType] = useState(null);
+
+  useEffect(() => {
+    const getUserDetails = async () => {
+      const userDetail = await firestore().collection('Users').doc(auth().currentUser.email.split('@')[0]).get()
+      setUserType(userDetail.data().userType);
+    }
+    getUserDetails();
+  },[])
+
+
 
   //Odadaki materyalleri ismine göre arama
   const handleSearch = async (text) => {
@@ -161,6 +175,7 @@ const StackDetails = ({ route }) => {
             onPress={() => {
               setModalType('preview');
               setClickedMaterial(id, item.materialID);
+              setFormVisible(true)
             }}
             removeMaterial={
               () =>
@@ -200,12 +215,18 @@ const StackDetails = ({ route }) => {
         onPress={() => {
           setModalType('add');
           setModalVisible(!modalVisible);
+          setFormVisible(true);
+          setPercent(0);
         }}
       /> : null}
 
       <MaterialModal
         isVisible={modalVisible}
+        formVisible={formVisible}
+        setFormVisible={setFormVisible}
         setModalVisible={setModalVisible}
+        percent={percent}
+        setPercent={setPercent}
         data={{ id, title, ...material }}
         type={modalType}
       />

@@ -9,28 +9,47 @@ import colors from '../../utils/colors';
 import {Formik} from 'formik';
 import {authValidationSchema} from '../../utils/validations'
 import auth from '@react-native-firebase/auth';
-import { getFirebaseAuthErrorMessage } from '../../utils/functions';
+import firestore from '@react-native-firebase/firestore';
+import { getFirebaseAuthErrorMessage, getFirebaseFirestoreErrorMessage } from '../../utils/functions';
 import { showMessage } from 'react-native-flash-message';
 
 const LoginRegister = ({type}) => {
       const [loading,setLoading] = useState(false);
-
+        
         const register = (values) => {
             const {email,password} = values;
+            const docID = email.split('@')[0];
             setLoading(true);
-            auth()
-            .createUserWithEmailAndPassword(email,password)
-            .then(() => {
-              setLoading(false);
-            })
-            .catch(error => {
-              setLoading(false);
-              const errorMessage = getFirebaseAuthErrorMessage(error.code)
+            firestore()
+            .collection('Users')
+            .doc(docID)
+            .set({email,userType: "default"})
+            .then(
+              () => {
+                auth()
+                .createUserWithEmailAndPassword(email,password)
+                .then(() => {
+                  setLoading(false);
+                })
+                .catch(error => {
+                  setLoading(false);
+                  const errorMessage = getFirebaseAuthErrorMessage(error.code)
+                  showMessage({
+                    message: errorMessage,
+                    type: "warning",
+                  });
+                })
+      
+              }
+            )
+            .catch((error) => {
               showMessage({
-                message: errorMessage,
-                type: "warning",
+                message: getFirebaseFirestoreErrorMessage(error),
+                type: "danger",
               });
+              setLoading(false);
             })
+            
         }
 
         const login = (values) => {

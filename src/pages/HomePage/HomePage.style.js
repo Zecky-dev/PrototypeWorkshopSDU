@@ -1,4 +1,5 @@
 import { StyleSheet,Dimensions } from 'react-native'
+import colors from '../../utils/colors'
 
 export default StyleSheet.create({
     container:{
@@ -20,7 +21,7 @@ export default StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'pink',
+        backgroundColor: colors.orange,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16
     },

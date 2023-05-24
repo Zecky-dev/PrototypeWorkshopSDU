@@ -21,22 +21,34 @@ import * as Progress from 'react-native-progress';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 
-const MaterialModal = ({ isVisible, setModalVisible, type, data }) => {
+const MaterialModal = ({ isVisible, setModalVisible, formVisible,setFormVisible, percent, setPercent, type, data }) => {
 
+  
 
-  const [image, setImage] = useState(null)
-  const [upload, setUpload] = useState({ visible: false, percent: 0 })
+  const [image, setImage] = useState(type === "preview" || type==="edit" ? data[0]?.materialImageURL : null)
+
+  // her data değiştiğinde image'i set et.
+  useEffect(() => {
+    if(type === "preview" || type==="edit") {
+      setImage(data[0]?.materialImageURL)
+    }
+    else {
+      setImage(null);
+    }
+  },[data]);
+
 
   // Bulunulan odaya yeni materyaller ekleme
   const addMaterial = async (roomID, roomTitle, materialName, materialUnit, materialDescription) => {
     const materialInfo = { roomTitle, roomID, materialID: uuidv4(), materialName, materialUnit, materialDescription, materialAvailable: true };
     const ref = storage().ref(`/${roomID}/${materialInfo.materialID}`);
     if (image) {
-      setUpload({ ...upload, visible: true })
-      const uploadTask = ref.putFile(image).on('state_changed', async (snapshot) => {
-        const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 10000;
-        setUpload({ ...upload, percent: percent });
-        if (percent === 10000) {
+        setFormVisible(!formVisible);
+        setPercent(0);
+        ref.putFile(image).on('state_changed', async (snapshot) => {
+        const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setPercent(percent);
+        if (percent === 100) {
           const URL = await ref.getDownloadURL();
           const material = { ...materialInfo, materialImageURL: URL };
           try {
@@ -51,6 +63,7 @@ const MaterialModal = ({ isVisible, setModalVisible, type, data }) => {
               showMessage({ message: error.message, type: 'danger' })
             })
             setModalVisible(!isVisible)
+            setFormVisible(true);
           }
           catch (err) {
             console.log(err)
@@ -58,8 +71,8 @@ const MaterialModal = ({ isVisible, setModalVisible, type, data }) => {
               message: getFirebaseFirestoreErrorMessage(err),
               type: "danger"
             })
-          }
-          setUpload({ ...upload, visible: false })
+            setModalVisible(!isVisible);
+          }          
         }
       });
     }
@@ -69,65 +82,92 @@ const MaterialModal = ({ isVisible, setModalVisible, type, data }) => {
 
   // Bulunulan odadaki materyali güncelleme
   const editMaterial = async (roomID, materialID, materialName, materialUnit, materialDescription, materialAvailable) => {
-    /*
-    - Tüm materyalleri çek.
-    - materialID'ye sahip materyali getir
-    - getirilen materyali localde güncelle
-    - güncellenen materyali materyallere(firebase) set et +
-    */
-
-    try {
-      const documentRef = firestore().collection('Rooms').doc(roomID);
-      const documentSnapshot = await documentRef.get();
-
-      if (documentSnapshot.exists) {
-        const materialArr = documentSnapshot.get('materials');
-        let materialsWithoutUpdateElement = materialArr.filter((material) => material.materialID !== materialID);
-        let updateElement = materialArr.find((material) => material.materialID === materialID);
-
-        if (updateElement) {
-          updateElement = {
-            ...updateElement,
-            materialAvailable,
-            materialDescription,
-            materialName,
-            materialUnit,
-          };
-
-          const updatedMaterials = [
-            ...materialsWithoutUpdateElement,
-            updateElement
-          ];
-
-          await documentRef.update({ materials: updatedMaterials });
-          setModalVisible(!isVisible)
-        } else {
-          console.log("Güncellenmek istenen öğe bulunamadı.");
-        }
+   
+    const ref = storage().ref(`${roomID}/${materialID}`)
+    if (image) {
+      setFormVisible(!formVisible);
+      setPercent(0);
+      ref.putFile(image).on('state_changed', async (snapshot) => {
+      const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setPercent(percent);
+      if (percent === 100) {
+        const URL = await ref.getDownloadURL();
+        try {
+          const documentRef = firestore().collection('Rooms').doc(roomID);
+          const documentSnapshot = await documentRef.get();
+    
+          if (documentSnapshot.exists) {
+            const materialArr = documentSnapshot.get('materials');
+            let materialsWithoutUpdateElement = materialArr.filter((material) => material.materialID !== materialID);
+            let updateElement = materialArr.find((material) => material.materialID === materialID);
+    
+            if (updateElement) {
+              updateElement = {
+                ...updateElement,
+                materialAvailable,
+                materialDescription,
+                materialName,
+                materialUnit,
+                materialImageURL: URL,
+              };
+    
+              const updatedMaterials = [
+                ...materialsWithoutUpdateElement,
+                updateElement
+              ];
+    
+              await documentRef.update({ materials: updatedMaterials });
+              setModalVisible(!isVisible)
+            } else {
+              console.log("Güncellenmek istenen öğe bulunamadı.");
+            }
+          }
+        } catch (err) {
+          console.log(err);
+        }        
       }
-    } catch (err) {
-      console.log(err);
-    }
-
-
+    });
+  }
+  else
+    showMessage({ message: 'Fotoğraf eklenmesi zorunludur.', type: 'danger' })
   }
 
   const takePhoto = async () => {
-    const result = await launchCamera({
-      mediaType: 'photo',
-      maxWidth: 300,
-      maxHeight: 300,
-      quality: 1,
-      cameraType: 'back',
-    });
-    setImage(result.assets[0].uri);
+    try {
+      const result = await launchCamera({
+        mediaType: 'photo',
+        quality: 1,
+        cameraType: 'back',
+      });
+      setImage(result.assets[0].uri);
+    }
+    catch(error) {
+      console.log("Fotoğraf çekilmedi");
+    }
+    
   }
+
+  const takeImageFromGallery = async () => {
+    try {
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
+        quality:1,
+      })
+      setImage(result.assets[0].uri);
+    }
+    catch(error) {
+      console.log("Fotoğraf seçilmedi"); 
+    } 
+    
+  }
+
+
 
   return (
     <Modal
       isVisible={isVisible}
-      onBackButtonPress={() => setModalVisible(!isVisible)}
-      onBackdropPress={() => setModalVisible(!isVisible)}
+      onBackButtonPress={ formVisible ? () => setModalVisible(!isVisible) : null}
+      onBackdropPress={formVisible ? () => setModalVisible(!isVisible) : null}
       animationIn={'slideInRight'}
       animationOut={'slideOutLeft'}
       useNativeDriver>
@@ -171,10 +211,10 @@ const MaterialModal = ({ isVisible, setModalVisible, type, data }) => {
                 : null
           }>
           {({ handleChange, handleBlur, handleSubmit, values }) => {
-            if (upload.visible)
+            if (!formVisible)
               return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                  <Progress.Circle size={200} progress={0.7} fill='rgba(000,000,000,0)' showsText />
+                  <Progress.Circle size={200} progress={percent} fill='rgba(000,000,000,0)' showsText />
                 </View>
               )
             else {
@@ -182,24 +222,24 @@ const MaterialModal = ({ isVisible, setModalVisible, type, data }) => {
                 <ScrollView style={styles.innerContainer}>
                   <View style={styles.imageAddContainer}>
                     <View style={{ alignItems: 'center' }}>
-                      <Image source={{uri: image}} style={styles.image} />
+                      <Image source={ image ? {uri: image} : require('../../assets/images/no_image.jpg')} style={styles.image} />
                     </View>
-                    <View style={styles.buttonContainer}>
+                    {type !== "preview" ? (<View style={styles.buttonContainer}>
                       <CustomButton
                         label="Kameradan Çek"
                         icon={{ name: 'camera', color: colors.white, size: 36 }}
                         additionalStyles={{ container: { borderRadius: 8, width: '49%', backgroundColor: '#6e186f' } }}
                         onPress={() => takePhoto()}
-                      />
+                    />
 
                       <CustomButton
                         label="Galeriden Seç"
                         additionalStyles={{ container: { borderRadius: 8, width: '49%', backgroundColor: '#6e186f' } }}
                         icon={{ name: 'view-gallery', color: colors.white, size: 36 }}
-                        onPress={() => console.log('Kameradan çekiliyor')}
+                        onPress={() => takeImageFromGallery()}
                       />
-                    </View>
-
+                    </View>) : null} 
+                    
                   </View>
 
                   {/* material name */}

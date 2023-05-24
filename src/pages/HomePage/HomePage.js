@@ -18,7 +18,10 @@ import {getFirebaseFirestoreErrorMessage} from '../../utils/functions'
 import MaterialCard from '../../components/MaterialCard/MaterialCard';
 
 
-const HomePage = ({navigation}) => {
+const HomePage = ({navigation,route}) => {
+
+    const userType = route.params.userType;
+
     const [modalVisibility, setModalVisibility] = useState(false)        
     const [rooms,setRooms] = useState([]);
     const [title,setTitle] = useState('');
@@ -28,9 +31,6 @@ const HomePage = ({navigation}) => {
     const [allMaterials,setAllMaterials] = useState([]);
     const [filteredMaterials,setFilteredMaterials] = useState([])
     const [isSearching,setIsSearching] = useState(false)
-
-    //supervisor state
-    const [userType,setUserType] = useState('superVisor')
 
     //search
     const handleSearch = async(searchText) => {
@@ -125,7 +125,7 @@ const HomePage = ({navigation}) => {
                 key={'0'}
                 numColumns={2}
                 data={rooms}
-                renderItem={({item}) => <StackCard data={item} onLongPress={() => onRoomLongPress(item.id)} navigation={navigation}/>}        
+                renderItem={({item}) => <StackCard data={item} onLongPress={ userType === "superVisor" ? () => onRoomLongPress(item.id) : null} navigation={navigation}/>}        
                 keyExtractor={(item) => item.id}
             />:<FlatList
                 key={'1'}
@@ -153,6 +153,7 @@ const HomePage = ({navigation}) => {
             />:null}
             <Modal style={styles.modal}
                 isVisible={modalVisibility}
+                useNativeDriver
                 onBackButtonPress={() => setModalVisibility(!modalVisibility)}
                 onBackdropPress={() => setModalVisibility(!modalVisibility)}
             >
