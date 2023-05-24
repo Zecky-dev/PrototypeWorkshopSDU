@@ -21,6 +21,10 @@ const authValidations = {
         .min(8,({min}) => Error['minCharacter'](min))
         .max(16,({max}) => Error['maxCharacter'](max))
         .required(Error['required']),
+
+        confirmPassword: yup.string(Error['string'])
+        .oneOf([yup.ref('password'), null], 'Şifreleriniz eşleşmiyor.')
+
 }
 
 const materialValidations = {

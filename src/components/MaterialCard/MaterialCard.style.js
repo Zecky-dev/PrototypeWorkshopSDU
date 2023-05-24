@@ -9,6 +9,9 @@ export default StyleSheet.create({
         padding: 8
     },
 
+    cupboard: {
+        color: 'black',
+    },
 
     infoContainer: {
         flexDirection: 'row',

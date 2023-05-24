@@ -96,12 +96,19 @@ const LoginRegister = ({type}) => {
               </View>
 
               <Formik
-                initialValues={{email: '', password: ''}}
+                initialValues={{email: '', password: '', confirmPassword: ''}}
                 onSubmit={values => {
                   type === 'register' ? register(values) : login(values);
                 }}
                 validationSchema={authValidationSchema}>
-                {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  errors,
+                  touched,
+                }) => (
                   <View>
                     <CustomTextInput
                       icon={{name: 'email', size: 32, color: 'gray'}}
@@ -109,7 +116,11 @@ const LoginRegister = ({type}) => {
                       onChangeText={handleChange('email')}
                       additionalStyles={{container: {margin: 8}}}
                     />
-                    {errors.email && touched.email ? <View><Text style={{color:'red'}}>{errors.email}</Text></View> : null}
+                    {errors.email && touched.email ? (
+                      <View>
+                        <Text style={{color: 'red'}}>{errors.email}</Text>
+                      </View>
+                    ) : null}
                     <View style={{height: 16}} />
                     <CustomTextInput
                       placeholder="Şifreniz"
@@ -118,7 +129,32 @@ const LoginRegister = ({type}) => {
                       onChangeText={handleChange('password')}
                       secret={true}
                     />
-                    {errors.password && touched.password ? <View><Text style={{color:'red'}}>{errors.password}</Text></View> : null}
+                    {errors.password && touched.password ? (
+                      <View>
+                        <Text style={{color: 'red'}}>{errors.password}</Text>
+                      </View>
+                    ) : null}
+
+                    {type === 'register' ? (
+                      <>
+                        <View style={{height: 16}} />
+                        <CustomTextInput
+                          placeholder="Tekrar Şifreniz"
+                          icon={{name: 'lock-reset', size: 32, color: 'gray'}}
+                          additionalStyles={{container: {margin: 8}}}
+                          onChangeText={handleChange('confirmPassword')}
+                          secret={true}
+                        />
+                        {errors.confirmPassword && touched.confirmPassword ? (
+                          <View>
+                            <Text style={{color: 'red'}}>
+                              {errors.confirmPassword}
+                            </Text>
+                          </View>
+                        ) : null}
+                      </>
+                    ) : null}
+
                     <View style={{height: 16}} />
                     <CustomButton
                       label={type === 'register' ? 'Kayıt Ol' : 'Giriş Yap'}

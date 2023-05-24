@@ -108,7 +108,7 @@ const HomePage = ({navigation,route}) => {
         firestore()
         .collection('Rooms')
         .add({
-            title: roomTitle
+            title: roomTitle.toUpperCase()
         })
         .then(() => console.log("Successfully added"))
     }

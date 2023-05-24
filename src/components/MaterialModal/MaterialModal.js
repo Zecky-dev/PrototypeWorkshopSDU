@@ -25,14 +25,13 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible,setFormVisible,
 
   
 
-  const [image, setImage] = useState(type === "preview" || type==="edit" ? data[0]?.materialImageURL : null)
+  const [image, setImage] = useState(null)
+  const [imageURL, setImageURL] = useState(type === "preview" || type==="edit" ? data[0]?.materialImageURL : null)
 
   // her data değiştiğinde image'i set et.
   useEffect(() => {
     if(type === "preview" || type==="edit") {
-      setImage(data[0]?.materialImageURL)
-    }
-    else {
+      setImageURL(data[0]?.materialImageURL)
       setImage(null);
     }
   },[data]);
@@ -42,9 +41,9 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible,setFormVisible,
   const addMaterial = async (roomID, roomTitle, materialName, materialUnit, materialDescription) => {
     const materialInfo = { roomTitle, roomID, materialID: uuidv4(), materialName, materialUnit, materialDescription, materialAvailable: true };
     const ref = storage().ref(`/${roomID}/${materialInfo.materialID}`);
+    setFormVisible(!formVisible);
+    setPercent(0);
     if (image) {
-        setFormVisible(!formVisible);
-        setPercent(0);
         ref.putFile(image).on('state_changed', async (snapshot) => {
         const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setPercent(percent);
@@ -82,11 +81,11 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible,setFormVisible,
 
   // Bulunulan odadaki materyali güncelleme
   const editMaterial = async (roomID, materialID, materialName, materialUnit, materialDescription, materialAvailable) => {
-   
     const ref = storage().ref(`${roomID}/${materialID}`)
-    if (image) {
+
+    if (image) {  
       setFormVisible(!formVisible);
-      setPercent(0);
+    setPercent(0);
       ref.putFile(image).on('state_changed', async (snapshot) => {
       const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       setPercent(percent);
@@ -139,6 +138,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible,setFormVisible,
         quality: 1,
         cameraType: 'back',
       });
+      setImageURL(null);
       setImage(result.assets[0].uri);
     }
     catch(error) {
@@ -222,7 +222,8 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible,setFormVisible,
                 <ScrollView style={styles.innerContainer}>
                   <View style={styles.imageAddContainer}>
                     <View style={{ alignItems: 'center' }}>
-                      <Image source={ image ? {uri: image} : require('../../assets/images/no_image.jpg')} style={styles.image} />
+                      <Image source={ 
+                        imageURL ? {uri: imageURL} : image ? {uri : image} : require('../../assets/images/no_image.jpg')} style={styles.image} />
                     </View>
                     {type !== "preview" ? (<View style={styles.buttonContainer}>
                       <CustomButton
