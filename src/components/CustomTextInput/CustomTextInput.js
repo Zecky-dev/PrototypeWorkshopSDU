@@ -29,7 +29,7 @@ const CustomTextInput = ({placeholder,type,onChangeText,additionalStyles,secret=
           name= {passEntry ? 'eye-off' : 'eye'}
           size= {24}
           onPress={() => setPassEntry(!passEntry)}
-          style={{marginHorizontal: 8}}
+          style={{marginHorizontal: 8, color: 'grey'}}
           />
           )
           : null

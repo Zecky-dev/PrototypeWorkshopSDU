@@ -3,7 +3,7 @@ import colors from '../../utils/colors';
 export default StyleSheet.create({
 
     container: {
-        backgroundColor: colors.white,
+        backgroundColor: colors.grey,
         borderRadius: 8,
         margin: 8,
         padding: 8

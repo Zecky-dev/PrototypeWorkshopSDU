@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Alert, FlatList, Text, View } from 'react-native'
-import { FAB, SearchBar } from 'react-native-elements';
-
+import { FAB } from 'react-native-elements';
+import SearchBar from '../../components/SearchBar/SearchBar';
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './StackDetails.styles'
 
@@ -24,8 +24,8 @@ const StackDetails = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalType, setModalType] = useState("");
 
-  const [formVisible,setFormVisible] = useState(true);
-  const [percent,setPercent] = useState(0);
+  const [formVisible, setFormVisible] = useState(true);
+  const [percent, setPercent] = useState(0);
 
   //material states
   const [materials, setMaterials] = useState([]);
@@ -43,7 +43,7 @@ const StackDetails = ({ route }) => {
       setUserType(userDetail.data().userType);
     }
     getUserDetails();
-  },[])
+  }, [])
 
 
 
@@ -158,6 +158,43 @@ const StackDetails = ({ route }) => {
     }
   };
 
+  const renderMaterialCard = ({ item }) =>
+    <MaterialCard
+      data={item}
+      userType={userType}
+      onPress={() => {
+        setModalType('preview');
+        setClickedMaterial(id, item.materialID);
+        setFormVisible(true)
+      }}
+      removeMaterial={
+        () =>
+          Alert.alert(
+            'Eşyayı Kaldır',
+            'Eşyayı kaldırmak üzeresiniz emin misiniz ?',
+            [
+              {
+                text: 'Hayır',
+                onPress: () => { },
+                style: 'default',
+              },
+              {
+                text: 'Evet',
+                onPress: () => removeMaterial(id, item.materialID),
+                style: 'default',
+              },
+            ],
+            { cancelable: true }
+          )
+      }
+      editMaterial={() => {
+        setModalType('edit');
+        setClickedMaterial(id, item.materialID);
+      }}
+      takeMaterial={() => takeAndGiveBack(id, item.materialID, 'take')}
+      giveBackMaterial={() => takeAndGiveBack(id, item.materialID, 'giveback')}
+    />
+
   return (
     <View style={styles.container}>
       <SearchBar
@@ -167,43 +204,7 @@ const StackDetails = ({ route }) => {
 
       <FlatList
         data={materials}
-        renderItem={({ item }) => (
-          <MaterialCard
-            data={item}
-            userType={userType}
-            onPress={() => {
-              setModalType('preview');
-              setClickedMaterial(id, item.materialID);
-              setFormVisible(true)
-            }}
-            removeMaterial={
-              () =>
-                Alert.alert(
-                  'Eşyayı Kaldır',
-                  'Eşyayı kaldırmak üzeresiniz emin misiniz ?',
-                  [
-                    {
-                      text: 'Hayır',
-                      onPress: () => { },
-                      style: 'default',
-                    },
-                    {
-                      text: 'Evet',
-                      onPress: () => removeMaterial(id, item.materialID),
-                      style: 'default',
-                    },
-                  ],
-                  { cancelable: true }
-                )
-            }
-            editMaterial={() => {
-              setModalType('edit');
-              setClickedMaterial(id, item.materialID);
-            }}
-            takeMaterial={() => takeAndGiveBack(id, item.materialID, 'take')}
-            giveBackMaterial={() => takeAndGiveBack(id, item.materialID, 'giveback')}
-          />
-        )}
+        renderItem={renderMaterialCard}
       />
 
       {userType === 'superVisor' ? <FAB
