@@ -228,6 +228,7 @@ const StackDetails = ({ route }) => {
         setPercent={setPercent}
         data={{ id, title, ...material }}
         type={modalType}
+        userType={userType}
       />
     </View>
   );

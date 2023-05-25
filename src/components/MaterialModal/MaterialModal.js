@@ -21,7 +21,7 @@ import * as Progress from 'react-native-progress';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 
-const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible, percent, setPercent, type, data }) => {
+const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible, percent, setPercent, type, data,userType }) => {
 
   const [imageURI, setImageURI] = useState(null)
   const [imageURL, setImageURL] = useState(type === "preview" || type === "edit" ? data[0]?.materialImageURL : null)
@@ -95,6 +95,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
               const materialArr = documentSnapshot.get('materials');
               let materialsWithoutUpdateElement = materialArr.filter((material) => material.materialID !== materialID);
               let updateElement = materialArr.find((material) => material.materialID === materialID);
+              
               if (updateElement) {
                 updateElement = {
                   ...updateElement,
@@ -294,7 +295,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
                   <View style={styles['input'].container}>
                     <Text style={styles['input'].label}>Materyal Adeti</Text>
                     <CustomTextInput
-                      value={values.maxMaterialUnit}
+                      value={userType==='superVisor'?values.maxMaterialUnit:values.materialUnit}
                       onChangeText={handleChange('maxMaterialUnit')}
                       type={'numeric'}
                       modalType={type}
