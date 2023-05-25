@@ -4,7 +4,7 @@ import colors from '../../utils/colors'
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#9c9c9c'
+        backgroundColor: colors.cream
     },
     FAB: {
         position: 'absolute',

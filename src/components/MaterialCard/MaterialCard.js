@@ -55,7 +55,7 @@ const MaterialCard = ({ data, onPress, removeMaterial, editMaterial, isSearching
               container: {
                 flex: 1,
                 borderRadius: 4,
-                backgroundColor: colors.passive,
+                backgroundColor: colors.sdu_red,
               },
             }}
             isAvailable={userType !== 'superVisor' && data.materialUnit >= data.maxMaterialUnit}

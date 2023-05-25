@@ -1,19 +1,20 @@
-import { StyleSheet,Dimensions } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import colors from '../../utils/colors'
 
 export default StyleSheet.create({
-    container:{
-
+    container: {
+        flex: 1,
+        backgroundColor: colors.cream
     },
-    FAB:{
+    FAB: {
         position: 'absolute',
         right: 16,
         bottom: 16,
     },
-    modal:{
-        margin: 0, 
-        alignItems: 'center', 
-        justifyContent: 'flex-end' 
+    modal: {
+        margin: 0,
+        alignItems: 'center',
+        justifyContent: 'flex-end'
     },
     modal_view: {
         paddingVertical: 16,
@@ -25,9 +26,9 @@ export default StyleSheet.create({
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16
     },
-    text:{
+    text: {
         text_input: {
-            width:'80%'
+            width: '80%'
         },
 
     }

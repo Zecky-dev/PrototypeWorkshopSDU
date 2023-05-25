@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Image, View, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, Image, View, ScrollView } from 'react-native';
 
 import Modal from 'react-native-modal';
 
@@ -37,7 +37,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
 
   // Bulunulan odaya yeni materyaller ekleme
   const addMaterial = async (roomID, roomTitle, materialName, maxMaterialUnit, materialDescription) => {
-    const materialInfo = { roomTitle, roomID, materialID: uuidv4(), materialName,materialUnit:maxMaterialUnit, maxMaterialUnit, materialDescription, materialAvailable: true };
+    const materialInfo = { roomTitle, roomID, materialID: uuidv4(), materialName, materialUnit: maxMaterialUnit, maxMaterialUnit, materialDescription, materialAvailable: true };
     const ref = storage().ref(`/${roomID}/${materialInfo.materialID}`);
     if (imageURI) {
       setFormVisible(!formVisible);
