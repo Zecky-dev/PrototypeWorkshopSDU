@@ -130,7 +130,7 @@ const StackDetails = ({ route }) => {
     setMaterial(clickedMaterial);
   }
 
-  const takeAndGetBack = async (roomID, materialID, type) => {
+  const takeAndGiveBack = async (roomID, materialID, type) => {
     try {
       const roomRef = firestore().collection('Rooms').doc(roomID);
       const roomSnapshot = await roomRef.get();
@@ -138,7 +138,6 @@ const StackDetails = ({ route }) => {
 
       const updateMaterial = allMaterials.find(material => material.materialID === materialID);
       const updateWithoutMaterial = allMaterials.filter(material => material.materialID !== materialID);
-
       if (+updateMaterial.materialUnit >= 0 && +updateMaterial.materialUnit <= +updateMaterial.maxMaterialUnit) {
         const materialUnit = +updateMaterial.materialUnit;
         const updatedMaterialUnit = type === 'take' ? materialUnit - 1 : materialUnit + 1;
@@ -201,8 +200,8 @@ const StackDetails = ({ route }) => {
               setModalType('edit');
               setClickedMaterial(id, item.materialID);
             }}
-            takeMaterial={() => takeAndGetBack(id, item.materialID, 'take')}
-            giveBackMaterial={() => takeAndGetBack(id, item.materialID, 'giveback')}
+            takeMaterial={() => takeAndGiveBack(id, item.materialID, 'take')}
+            giveBackMaterial={() => takeAndGiveBack(id, item.materialID, 'giveback')}
           />
         )}
       />

@@ -23,7 +23,6 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible, percent, setPercent, type, data }) => {
 
-
   const [imageURI, setImageURI] = useState(null)
   const [imageURL, setImageURL] = useState(type === "preview" || type === "edit" ? data[0]?.materialImageURL : null)
 
@@ -38,7 +37,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
 
   // Bulunulan odaya yeni materyaller ekleme
   const addMaterial = async (roomID, roomTitle, materialName, maxMaterialUnit, materialDescription) => {
-    const materialInfo = { roomTitle, roomID, materialID: uuidv4(), materialName, materialUnit : maxMaterialUnit, maxMaterialUnit, materialDescription, materialAvailable: true };
+    const materialInfo = { roomTitle, roomID, materialID: uuidv4(), materialName,materialUnit:maxMaterialUnit, maxMaterialUnit, materialDescription, materialAvailable: true };
     const ref = storage().ref(`/${roomID}/${materialInfo.materialID}`);
     if (imageURI) {
       setFormVisible(!formVisible);
@@ -79,9 +78,8 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
   }
 
   // Bulunulan odadaki materyali güncelleme
-  const editMaterial = async (roomID, materialID, materialName, maxMaterialUnit, materialDescription, materialAvailable) => {
+  const editMaterial = async (roomID, materialID, materialName, materialUnit, maxMaterialUnit, materialDescription, materialAvailable) => {
     const ref = storage().ref(`${roomID}/${materialID}`)
-    console.log("deneme")
     if (imageURI) {
       setFormVisible(!formVisible);
       ref.putFile(imageURI).on('state_changed', async (snapshot) => {
@@ -97,13 +95,13 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
               const materialArr = documentSnapshot.get('materials');
               let materialsWithoutUpdateElement = materialArr.filter((material) => material.materialID !== materialID);
               let updateElement = materialArr.find((material) => material.materialID === materialID);
-              console.log(updateElement)
               if (updateElement) {
                 updateElement = {
                   ...updateElement,
                   materialAvailable,
                   materialDescription,
                   materialName,
+                  materialUnit,
                   maxMaterialUnit,
                   materialImageURL: URL,
                 };
@@ -143,6 +141,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
               materialAvailable,
               materialDescription,
               materialName,
+              materialUnit,
               maxMaterialUnit,
               materialImageURL: imageURL || updateElement.materialImageURL,
             };
@@ -218,7 +217,8 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
           }
             : {
               materialName: data['0'] ? data['0'].materialName : '',
-              maxMaterialUnit: data['0'] ? data['0'].materialUnit : 1,
+              materialUnit: data['0'] ? data['0'].materialUnit : 1,
+              maxMaterialUnit: data['0'] ? data['0'].maxMaterialUnit : 1,
               materialDescription: data['0']
                 ? data['0'].materialDescription
                 : '',
@@ -241,6 +241,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
                     data.id,
                     data['0'].materialID,
                     values.materialName,
+                    values.materialUnit,
                     values.maxMaterialUnit,
                     values.materialDescription,
                     values.materialAvailable === '+' ? true : false,
