@@ -20,6 +20,7 @@ const CustomTextInput = ({placeholder,type,onChangeText,additionalStyles,secret=
           multiline={multiline}
           value={value}
           keyboardType={type}
+          placeholderTextColor={colors.black}
           style={[{padding:8,flex:1,color:colors.black},additionalStyles]}
         />
         {
