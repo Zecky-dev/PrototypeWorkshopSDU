@@ -58,6 +58,7 @@ const MaterialCard = ({ data, onPress, removeMaterial, editMaterial, isSearching
                 backgroundColor: colors.passive,
               },
             }}
+            isAvailable={userType !== 'superVisor' && data.materialUnit >= data.maxMaterialUnit}
             onPress={
               userType === 'superVisor' ? removeMaterial : giveBackMaterial
             }

@@ -37,8 +37,8 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
 
 
   // Bulunulan odaya yeni materyaller ekleme
-  const addMaterial = async (roomID, roomTitle, materialName, materialUnit, materialDescription) => {
-    const materialInfo = { roomTitle, roomID, materialID: uuidv4(), materialName, materialUnit, materialDescription, materialAvailable: true };
+  const addMaterial = async (roomID, roomTitle, materialName, maxMaterialUnit, materialDescription) => {
+    const materialInfo = { roomTitle, roomID, materialID: uuidv4(), materialName, materialUnit : maxMaterialUnit, maxMaterialUnit, materialDescription, materialAvailable: true };
     const ref = storage().ref(`/${roomID}/${materialInfo.materialID}`);
     if (imageURI) {
       setFormVisible(!formVisible);
@@ -79,8 +79,9 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
   }
 
   // Bulunulan odadaki materyali güncelleme
-  const editMaterial = async (roomID, materialID, materialName, materialUnit, materialDescription, materialAvailable) => {
+  const editMaterial = async (roomID, materialID, materialName, maxMaterialUnit, materialDescription, materialAvailable) => {
     const ref = storage().ref(`${roomID}/${materialID}`)
+    console.log("deneme")
     if (imageURI) {
       setFormVisible(!formVisible);
       ref.putFile(imageURI).on('state_changed', async (snapshot) => {
@@ -96,14 +97,14 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
               const materialArr = documentSnapshot.get('materials');
               let materialsWithoutUpdateElement = materialArr.filter((material) => material.materialID !== materialID);
               let updateElement = materialArr.find((material) => material.materialID === materialID);
-
+              console.log(updateElement)
               if (updateElement) {
                 updateElement = {
                   ...updateElement,
                   materialAvailable,
                   materialDescription,
                   materialName,
-                  materialUnit,
+                  maxMaterialUnit,
                   materialImageURL: URL,
                 };
 
@@ -136,14 +137,13 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
           const materialArr = documentSnapshot.get('materials');
           let materialsWithoutUpdateElement = materialArr.filter((material) => material.materialID !== materialID);
           let updateElement = materialArr.find((material) => material.materialID === materialID);
-
           if (updateElement) {
             updateElement = {
               ...updateElement,
               materialAvailable,
               materialDescription,
               materialName,
-              materialUnit,
+              maxMaterialUnit,
               materialImageURL: imageURL || updateElement.materialImageURL,
             };
 
@@ -211,13 +211,14 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
         <Formik
           initialValues={type === 'add' ? {
             materialName: '',
+            maxMaterialUnit: 0,
             materialUnit: 0,
             materialDescription: '',
             materialAvailable: ''
           }
             : {
               materialName: data['0'] ? data['0'].materialName : '',
-              materialUnit: data['0'] ? data['0'].materialUnit : 1,
+              maxMaterialUnit: data['0'] ? data['0'].materialUnit : 1,
               materialDescription: data['0']
                 ? data['0'].materialDescription
                 : '',
@@ -231,7 +232,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
                   data.id,
                   data.title,
                   values.materialName,
-                  values.materialUnit,
+                  values.maxMaterialUnit,
                   values.materialDescription,
                 )
               : type === 'edit'
@@ -240,7 +241,7 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
                     data.id,
                     data['0'].materialID,
                     values.materialName,
-                    values.materialUnit,
+                    values.maxMaterialUnit,
                     values.materialDescription,
                     values.materialAvailable === '+' ? true : false,
                   )
@@ -292,8 +293,8 @@ const MaterialModal = ({ isVisible, setModalVisible, formVisible, setFormVisible
                   <View style={styles['input'].container}>
                     <Text style={styles['input'].label}>Materyal Adeti</Text>
                     <CustomTextInput
-                      value={values.materialUnit}
-                      onChangeText={handleChange('materialUnit')}
+                      value={values.maxMaterialUnit}
+                      onChangeText={handleChange('maxMaterialUnit')}
                       type={'numeric'}
                       modalType={type}
                     />

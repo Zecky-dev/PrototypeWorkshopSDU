@@ -139,7 +139,7 @@ const StackDetails = ({ route }) => {
       const updateMaterial = allMaterials.find(material => material.materialID === materialID);
       const updateWithoutMaterial = allMaterials.filter(material => material.materialID !== materialID);
 
-      if (+updateMaterial.materialUnit >= 0) {
+      if (+updateMaterial.materialUnit >= 0 && +updateMaterial.materialUnit <= +updateMaterial.maxMaterialUnit) {
         const materialUnit = +updateMaterial.materialUnit;
         const updatedMaterialUnit = type === 'take' ? materialUnit - 1 : materialUnit + 1;
         const materialAvailable = updatedMaterialUnit !== 0;
