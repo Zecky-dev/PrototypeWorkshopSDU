@@ -8,13 +8,13 @@ export default StyleSheet.create({
         justifyContent:'center',
     },
     imageContainer: {
-        flex: 0.5,
+        flex: 0.4,
         flexDirection: 'row',
-        justifyContent:'space-around',
-        alignItems: 'center'
+        alignItems: 'flex-end',
+        marginBottom: 12,
     },
     formikContainer: {
-        flex: 0.5
+        flex: 0.6
     },
     title: {
         fontSize: 36,

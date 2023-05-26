@@ -3,17 +3,18 @@ import colors from '../../utils/colors'
 
 export default StyleSheet.create({
     container: {
-        backgroundColor: colors.cream,
+        backgroundColor: 'white',
+        margin: 8,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 8
+        borderRadius: 6,
+        padding: 4
     },
     icon: {
         color: 'black',
     },
     input: {
         flex: 1,
-        backgroundColor: 'white',
         marginLeft: 8,
         paddingHorizontal: 4, 
         borderRadius: 8,
